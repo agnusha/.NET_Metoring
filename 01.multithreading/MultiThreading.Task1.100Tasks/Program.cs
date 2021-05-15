@@ -44,10 +44,9 @@ namespace MultiThreading.Task1._100Tasks
                     }
                 });
                 taskArray[taskNumber].Start();
-                taskArray[taskNumber].Wait();
             }
 
-            //Task.WaitAll(taskArray);
+            Task.WaitAll(taskArray);
             Console.ReadLine();
         }
 
