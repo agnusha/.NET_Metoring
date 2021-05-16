@@ -13,9 +13,7 @@ namespace MultiThreading.Task1._100Tasks
     static class Program
     {
         const int TaskAmount = 10;
-        const int MaxIterationsCount = 5;
-
-        //const int MaxIterationsCount = 1000;
+        const int MaxIterationsCount = 1000;
 
         static void Main(string[] args)
         {
