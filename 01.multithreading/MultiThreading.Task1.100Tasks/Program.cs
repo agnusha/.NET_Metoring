@@ -5,17 +5,16 @@
  */
 using System;
 using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
 
 namespace MultiThreading.Task1._100Tasks
 {
-    static class Program
+    internal static class Program
     {
-        const int TaskAmount = 10;
-        const int MaxIterationsCount = 1000;
+        private const int TaskAmount = 10;
+        private const int MaxIterationsCount = 1000;
 
-        static void Main(string[] args)
+        private static void Main(string[] args)
         {
             Console.WriteLine(".Net Mentoring Program. Multi threading V1.");
             Console.WriteLine("1.	Write a program, which creates an array of 100 Tasks, runs them and waits all of them are not finished.");
@@ -28,11 +27,11 @@ namespace MultiThreading.Task1._100Tasks
             Console.ReadLine();
         }
 
-        static void HundredTasks()
+        private static void HundredTasks()
         {
-            Task[] taskArray = new Task[TaskAmount];
+            var taskArray = new Task[TaskAmount];
 
-            for (int taskNumber = 0; taskNumber < taskArray.Length; taskNumber++)
+            for (var taskNumber = 0; taskNumber < taskArray.Length; taskNumber++)
             {
                 var tmp = taskNumber;
                 taskArray[taskNumber] = new Task(() => {
@@ -48,7 +47,7 @@ namespace MultiThreading.Task1._100Tasks
             Console.ReadLine();
         }
 
-        static void Output(int taskNumber, int iterationNumber)
+        private static void Output(int taskNumber, int iterationNumber)
         {
             Console.WriteLine($"Task #{taskNumber} – {iterationNumber}");
         }

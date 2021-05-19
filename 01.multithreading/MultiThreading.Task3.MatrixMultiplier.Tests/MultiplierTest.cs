@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using MultiThreading.Task3.MatrixMultiplier.Matrices;
 using MultiThreading.Task3.MatrixMultiplier.Multipliers;
@@ -8,6 +9,12 @@ namespace MultiThreading.Task3.MatrixMultiplier.Tests
     [TestClass]
     public class MultiplierTest
     {
+        private const int MinAmount = 1;
+        private const int MaxAmount = 200;
+
+        private static Random _randNum;
+        private static Stopwatch _watch;
+
         [TestMethod]
         public void MultiplyMatrix3On3Test()
         {
@@ -18,13 +25,52 @@ namespace MultiThreading.Task3.MatrixMultiplier.Tests
         [TestMethod]
         public void ParallelEfficiencyTest()
         {
-            // todo: implement a test method to check the size of the matrix which makes parallel multiplication more effective than
-            // todo: the regular one
+            _randNum = new Random();
+
+            var multiplier = new MatricesMultiplier();
+            var multiplierParallel = new MatricesMultiplierParallel();
+
+            for (var i = MinAmount; i <= MaxAmount; i++)
+            {
+                var m1 = CreateRandomMatrix(i, i);
+                var m2 = CreateRandomMatrix(i, i);
+
+                var time1 = GetExecutionTime(() => multiplier.Multiply(m1, m2));
+                var time2 = GetExecutionTime(() => multiplierParallel.Multiply(m1, m2));
+
+                Console.WriteLine($"Size: {i}. Parallel is quicker: {time1 > time2}");
+                Console.WriteLine($"------");
+            }
         }
 
         #region private methods
 
-        void TestMatrix3On3(IMatricesMultiplier matrixMultiplier)
+        private static long GetExecutionTime(Action method)
+        {
+            _watch = Stopwatch.StartNew();
+            method();
+            _watch.Stop();
+
+            Console.WriteLine($"Execution Time: {_watch.ElapsedMilliseconds} ms");
+            return _watch.ElapsedMilliseconds;
+        }
+
+        private static Matrix CreateRandomMatrix(int row, int col)
+        {
+
+            var m1 = new Matrix(row, col);
+
+            for (long i = 0; i < m1.RowCount; i++)
+            {
+                for (byte j = 0; j < m1.ColCount; j++)
+                {
+                    m1.SetElement(i, j, _randNum.Next(0, 10));
+                }
+            }
+            return m1;
+        }
+
+        private static void TestMatrix3On3(IMatricesMultiplier matrixMultiplier)
         {
             if (matrixMultiplier == null)
             {
