@@ -17,6 +17,8 @@ namespace MultiThreading.Task4.Threads.Join
     class Program
     {
         private const int TaskAmount = 10;
+        private static int _state = 100;
+        private static Semaphore _pool;
 
         private static void Main(string[] args)
         {
@@ -31,18 +33,33 @@ namespace MultiThreading.Task4.Threads.Join
 
             Console.WriteLine("- a) Option");
 
-            var state = 100;
-            for (var taskNumber = 0; taskNumber < TaskAmount; taskNumber++)
+            for (var taskNumber = 1; taskNumber <= TaskAmount; taskNumber++)
             {
-                var thread = new Thread(() => Output(taskNumber, ref state));
+                var number = taskNumber;
+                var thread = new Thread(() => Output(number, ref _state));
                 thread.Start();
                 thread.Join();
             }
-            
+
+            Console.WriteLine();
             Console.WriteLine("- b) Option");
 
+            _state = 100;
+            _pool = new Semaphore(1, 1);
+            for (var taskNumber = 1; taskNumber <= TaskAmount; taskNumber++)
+            {
+                var number = taskNumber;
+                ThreadPool.QueueUserWorkItem(result => SemaphoreOutput(number, ref _state));
+            }
 
             Console.ReadLine();
+        }
+
+        private static void SemaphoreOutput(int taskNumber, ref int state)
+        {
+            _pool.WaitOne();
+            Output(taskNumber, ref state);
+            _pool.Release();
         }
 
         private static void Output(int taskNumber, ref int state)
