@@ -2,7 +2,7 @@
 
 namespace MultiThreading.Task3.MatrixMultiplier.Multipliers
 {
-    public class MatricesMultiplier : IMatricesMultiplier
+    public class MatricesMultiplierParalel : IMatricesMultiplier
     {
         public IMatrix Multiply(IMatrix m1, IMatrix m2)
         {

@@ -18,7 +18,7 @@ namespace MultiThreading.Task3.MatrixMultiplier.Tests
         [TestMethod]
         public void MultiplyMatrix3On3Test()
         {
-            TestMatrix3On3(new MatricesMultiplier());
+            TestMatrix3On3(new MatricesMultiplierParalel());
             TestMatrix3On3(new MatricesMultiplierParallel());
         }
 
@@ -27,13 +27,13 @@ namespace MultiThreading.Task3.MatrixMultiplier.Tests
         {
             _randNum = new Random();
 
-            var multiplier = new MatricesMultiplier();
+            var multiplier = new MatricesMultiplierParalel();
             var multiplierParallel = new MatricesMultiplierParallel();
 
             for (var i = MinAmount; i <= MaxAmount; i++)
             {
-                var m1 = CreateRandomMatrix(i, i);
-                var m2 = CreateRandomMatrix(i, i);
+                var m1 = Program.CreateRandomMatrix(i, i, _randNum);
+                var m2 = Program.CreateRandomMatrix(i, i, _randNum);
 
                 var time1 = GetExecutionTime(() => multiplier.Multiply(m1, m2));
                 var time2 = GetExecutionTime(() => multiplierParallel.Multiply(m1, m2));
@@ -55,20 +55,6 @@ namespace MultiThreading.Task3.MatrixMultiplier.Tests
             return _watch.ElapsedMilliseconds;
         }
 
-        private static Matrix CreateRandomMatrix(int row, int col)
-        {
-
-            var m1 = new Matrix(row, col);
-
-            for (long i = 0; i < m1.RowCount; i++)
-            {
-                for (byte j = 0; j < m1.ColCount; j++)
-                {
-                    m1.SetElement(i, j, _randNum.Next(0, 10));
-                }
-            }
-            return m1;
-        }
 
         private static void TestMatrix3On3(IMatricesMultiplier matrixMultiplier)
         {
