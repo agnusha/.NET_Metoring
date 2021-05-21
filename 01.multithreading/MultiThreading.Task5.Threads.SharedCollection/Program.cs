@@ -12,12 +12,14 @@ using System.Threading.Tasks;
 
 namespace MultiThreading.Task5.Threads.SharedCollection
 {
-    class Program
+    static class Program
     {
-        private static readonly List<int> List = new List<int>() { 1, 2, 3, 4, 5 };
+        private static List<int> _listValues;
 
         static void Main(string[] args)
         {
+            _listValues = new List<int>() { 1, 2, 3, 4, 5 };
+
             Console.WriteLine("5. Write a program which creates two threads and a shared collection:");
             Console.WriteLine("the first one should add 10 elements into the collection and the second should print all elements in the collection after each adding.");
             Console.WriteLine("Use Thread, ThreadPool or Task classes for thread creation and any kind of synchronization constructions.");
@@ -42,7 +44,7 @@ namespace MultiThreading.Task5.Threads.SharedCollection
 
         private static void LockMethod(Action method)
         {
-            lock (List)
+            lock (_listValues)
             {
                 method();
             }
@@ -52,14 +54,14 @@ namespace MultiThreading.Task5.Threads.SharedCollection
         {
             foreach (var i in Enumerable.Range(1, 10))
             {
-                List.Add(i);
+                _listValues.Add(i);
             }
         }
         
         private static void PrintRes()
         {
             Console.Write("Result: ");
-            foreach (var value in List)
+            foreach (var value in _listValues)
             {
                 Console.Write(value + " ");
             }
