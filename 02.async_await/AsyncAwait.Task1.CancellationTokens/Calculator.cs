@@ -11,14 +11,12 @@ namespace AsyncAwait.Task1.CancellationTokens
 
             for (int i = 0; i < n; i++)
             {
-                token.ThrowIfCancellationRequested();
-                //if (token.IsCancellationRequested)
-                //{
-                //    Console.WriteLine("Cancellation requested in token");
-                //    token.ThrowIfCancellationRequested();
-                //}
-                //else 
-                    sum += (i + 1);
+                if (token.IsCancellationRequested)
+                {
+                    Console.WriteLine($"Sum for {n} cancelled...");
+                    token.ThrowIfCancellationRequested();
+                }
+                sum += (i + 1);
                 Thread.Sleep(50);
             }
 
