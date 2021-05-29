@@ -25,9 +25,15 @@ namespace AsyncAwait.Task2.CodeReviewChallenge.Controllers
             return View();
         }
 
-        public ActionResult Privacy()
+        public async Task<ActionResult> Privacy()
         {
-            ViewBag.Message = _privacyDataService.GetPrivacyDataAsync().Result;
+            /* 
+            sync over async - ситуация
+            лучше избегать, так как блокируем входящий поток и может возникнуть dead lock
+            also: get Aggregate exception
+            */
+            //ViewBag.Message = _privacyDataService.GetPrivacyDataAsync().Result;
+            ViewBag.Message = await _privacyDataService.GetPrivacyDataAsync();
             return View();
         }
 
