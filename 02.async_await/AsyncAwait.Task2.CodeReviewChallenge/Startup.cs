@@ -47,6 +47,7 @@ namespace AsyncAwait.CodeReviewChallenge
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
+            /* always false
             if (false && env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -55,6 +56,8 @@ namespace AsyncAwait.CodeReviewChallenge
             {
                 app.UseExceptionHandler("/Home/Error");
             }
+             */
+            app.UseExceptionHandler("/Home/Error");
 
             app.UseStatistic();
 
