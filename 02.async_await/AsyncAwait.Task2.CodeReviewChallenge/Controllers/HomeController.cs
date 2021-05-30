@@ -39,10 +39,17 @@ namespace AsyncAwait.Task2.CodeReviewChallenge.Controllers
 
         public async Task<IActionResult> Help()
         {
-            ViewBag.RequestInfo = await _assistant.RequestAssistanceAsync("guest").ConfigureAwait(false);
+            /* 
+            if you’re writing app-level code, do not use ConfigureAwait(false)
+            ConfigureAwait определяет, следует ли возобновлять работу на захваченном SynchronizationContext или нет.
+            В приложениях asp.net ресурс SynchronizationContext является контекстом запроса
+            if use ConfigureAwait(false) we set ViewBag.RequestInfo in different thread and we try to modify component created in controller thread
+            */
+            //ViewBag.RequestInfo = await _assistant.RequestAssistanceAsync("guest").ConfigureAwait(false);
+            ViewBag.RequestInfo = await _assistant.RequestAssistanceAsync("guest");
             return View();
         }
-        
+
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
