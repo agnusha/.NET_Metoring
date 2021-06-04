@@ -23,20 +23,32 @@ namespace AsyncAwait.Task2.CodeReviewChallenge.Middleware
         {   
             string path = context.Request.Path;
 
-            Task staticRegTask = Task.Run(
+
+/*            Task staticRegTask = Task.Run(
                 () => _statisticService.RegisterVisitAsync(path)
-                .ConfigureAwait(false)
-                .GetAwaiter().OnCompleted(UpdateHeaders));
-            Console.WriteLine(staticRegTask.Status); // just for debugging purposes
+                    .ConfigureAwait(false)
+                    .GetAwaiter().OnCompleted(UpdateHeaders));*/
             
-            void UpdateHeaders()
+            await _statisticService.RegisterVisitAsync(path);
+            await UpdateHeadersAsync();
+            
+            /*remove this line*/
+            //Console.WriteLine(staticRegTask.Status); // just for debugging purposes
+
+           
+            async Task UpdateHeadersAsync()
+            // add await
             {
+                /*                context.Response.Headers.Add(
+                                    CustomHttpHeaders.TotalPageVisits,
+                                    _statisticService.GetVisitsCountAsync(path).GetAwaiter().GetResult().ToString());*/
+
                 context.Response.Headers.Add(
                     CustomHttpHeaders.TotalPageVisits,
-                    _statisticService.GetVisitsCountAsync(path).GetAwaiter().GetResult().ToString());
+                    (await _statisticService.GetVisitsCountAsync(path)).ToString());
             }
-
-            Thread.Sleep(3000); // without this the statistic counter does not work
+            /*remove this line*/
+            //Thread.Sleep(3000); // without this the statistic counter does not work
             await _next(context);
         }
     }
