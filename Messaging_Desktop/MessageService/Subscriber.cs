@@ -6,7 +6,7 @@ using Amazon.SimpleNotificationService;
 using Amazon.SQS;
 using Amazon.SQS.Model;
 
-namespace Example.SubscriberApplication
+namespace Messaging_Desktop
 {
     public class Subscriber : IDisposable
     {

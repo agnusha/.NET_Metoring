@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Example.PublisherApplication;
+using System;
 
 namespace Messaging_Desktop
 {
@@ -6,7 +7,11 @@ namespace Messaging_Desktop
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+            Console.WriteLine("Write a directory to linsten");
+            var directory = Console.ReadLine();
+
+            Watcher.CreateWatcher(directory);
+
         }
     }
 }
