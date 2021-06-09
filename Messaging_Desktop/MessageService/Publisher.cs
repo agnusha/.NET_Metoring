@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using Amazon.SimpleNotificationService;
 
-namespace Messaging_Desktop
+namespace MessageService
 {
     public class Publisher : IDisposable
     {
