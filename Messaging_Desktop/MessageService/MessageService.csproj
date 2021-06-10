@@ -2,13 +2,14 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
+    <UserSecretsId>4faebdbd-86bf-4c69-bdd3-c1cee91a962e</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="AWSSDK.Core" Version="3.7.0.31" />
     <PackageReference Include="AWSSDK.SimpleNotificationService" Version="3.7.2" />
     <PackageReference Include="AWSSDK.SQS" Version="3.7.0.30" />
-    <PackageReference Include="Microsoft.Extensions.Options" Version="5.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="5.0.0" />
   </ItemGroup>
 
 </Project>
