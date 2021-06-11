@@ -5,8 +5,10 @@ namespace Example.PublisherApplication
 {
     public static class Watcher
     {
-        public static void CreateWatcher(string folder)
+        private static Action<string, string> _action;
+        public static void CreateWatcher(string folder, Action<string, string> action)
         {
+            _action = action;
             var _watcher = new FileSystemWatcher(@$"{folder}")
             {
                 NotifyFilter = NotifyFilters.Attributes
@@ -19,31 +21,23 @@ namespace Example.PublisherApplication
                                  | NotifyFilters.Size
             };
 
-            _watcher.Changed += OnChanged;
             _watcher.Created += OnCreated;
             _watcher.Deleted += OnDeleted;
             _watcher.Renamed += OnRenamed;
             _watcher.Error += OnError;
 
-            _watcher.Filter = "*.txt";
             _watcher.IncludeSubdirectories = true;
             _watcher.EnableRaisingEvents = true;
-        }
-
-
-        private static void OnChanged(object sender, FileSystemEventArgs e)
-        {
-            if (e.ChangeType != WatcherChangeTypes.Changed)
-            {
-                return;
-            }
-            Console.WriteLine($"Changed: {e.FullPath}");
         }
 
         private static void OnCreated(object sender, FileSystemEventArgs e)
         {
             string value = $"Created: {e.FullPath}";
             Console.WriteLine(value);
+
+            var textFromFile = ReadFile(e.FullPath);
+            _action(textFromFile, e.Name);
+
         }
 
         private static void OnDeleted(object sender, FileSystemEventArgs e) =>
@@ -59,7 +53,7 @@ namespace Example.PublisherApplication
         private static void OnError(object sender, ErrorEventArgs e) =>
             PrintException(e.GetException());
 
-        private static void PrintException(Exception? ex)
+        private static void PrintException(Exception ex)
         {
             if (ex != null)
             {
@@ -69,6 +63,16 @@ namespace Example.PublisherApplication
                 Console.WriteLine();
                 PrintException(ex.InnerException);
             }
+        }
+
+        private static string ReadFile(string path)
+        {
+            using FileStream fstream = File.OpenRead(path);
+            byte[] array = new byte[fstream.Length];
+            fstream.Read(array, 0, array.Length);
+            string textFromFile = System.Text.Encoding.Default.GetString(array);
+
+            return textFromFile;
         }
     }
 }

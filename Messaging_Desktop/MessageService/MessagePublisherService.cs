@@ -1,6 +1,7 @@
 ﻿using Amazon.Runtime;
 using Amazon.SimpleNotificationService;
 using MessageService.Models;
+using System;
 using System.Threading.Tasks;
 
 namespace MessageService
@@ -13,13 +14,13 @@ namespace MessageService
         {
             var credentials = new BasicAWSCredentials(configAws.AccessKey, configAws.SecretKey);
 
-            using var snsClient = new AmazonSimpleNotificationServiceClient(credentials);
+            var snsClient = new AmazonSimpleNotificationServiceClient(credentials);
             _publisher = new Publisher(snsClient, configAws.TopicName);
         }
 
-        public async Task SendMessageAsync(string message)
+        public async Task SendMessageAsync(string message, string filename)
         {
-            await _publisher.PublishAsync(message);
+            await _publisher.PublishAsync(message, filename);
         }
 
     }

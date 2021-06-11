@@ -1,6 +1,7 @@
 ﻿using Amazon.Runtime;
 using Amazon.SimpleNotificationService;
 using Amazon.SQS;
+using MessageService.Models;
 using System;
 using System.Threading.Tasks;
 
@@ -10,13 +11,13 @@ namespace MessageService
     {
         private readonly Subscriber _subscriber;
 
-        public MessageSubscriberService()
+        public MessageSubscriberService(ConfigAws configAws)
         {
-            var credentials = new BasicAWSCredentials("accessKey", "secretKey");
+            var credentials = new BasicAWSCredentials(configAws.AccessKey, configAws.SecretKey);
 
             using var sqsClient = new AmazonSQSClient(credentials);
             using var snsClient = new AmazonSimpleNotificationServiceClient(credentials);
-            _subscriber = new Subscriber(sqsClient, snsClient, "topicName", "queueName");
+            _subscriber = new Subscriber(sqsClient, snsClient, configAws.TopicName, configAws.QueueName);
         }
 
         public async Task ListenMessageAsync()

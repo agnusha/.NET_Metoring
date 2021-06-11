@@ -1,16 +1,17 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Amazon.SimpleNotificationService;
+using Amazon.SimpleNotificationService.Model;
 
 namespace MessageService
 {
-    public class Publisher : IDisposable
+    public class Publisher
     {
-        private AmazonSimpleNotificationServiceClient _snsClient;
+        private readonly AmazonSimpleNotificationServiceClient _snsClient;
         private readonly string _topicName;
         private string _topicArn;
         private bool _initialised;
-        private bool _disposed;
 
         public Publisher(AmazonSimpleNotificationServiceClient snsClient, string topicName)
         {
@@ -25,30 +26,21 @@ namespace MessageService
             _initialised = true;
         }
 
-        public async Task PublishAsync(string message)
+        public async Task PublishAsync(string message, string filename)
         {
             if (!_initialised)
                 await Initialise();
 
-            await _snsClient.PublishAsync(_topicArn, message);
-        }
-
-        protected virtual void Dispose(bool disposing)
-        {
-            if (!_disposed)
+            var publishRequest = new PublishRequest(_topicArn, message)
             {
-                if (disposing)
-                {
-                    _snsClient.Dispose();
-                    _snsClient = null;
+                MessageAttributes = new Dictionary<string, MessageAttributeValue>() {
+                    { 
+                        "filename", new MessageAttributeValue { DataType = "String", StringValue = filename }
+                    }
                 }
+            };
 
-                _disposed = true;
-            }
-        }
-        public void Dispose()
-        {
-            Dispose(true);
+            await _snsClient.PublishAsync(publishRequest);
         }
     }
 }

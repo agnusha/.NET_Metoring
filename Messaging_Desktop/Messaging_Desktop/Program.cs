@@ -6,24 +6,36 @@ using MessageService.Models;
 
 namespace Messaging_Desktop
 {
-    class Program
+    static class Program
     {
-        public static IConfigurationRoot Configuration { get; set; }
-
         static void Main()
         {
-            Console.WriteLine("Write a directory to listen");
-            var directory = Console.ReadLine();
+            try
+            {
+                Console.WriteLine("Write a directory to listen");
+                var directory = Console.ReadLine();
 
-            var configuration = new ConfigurationBuilder()
-              .AddUserSecrets<ConfigAws>()
-              .Build();
+                var configuration = new ConfigurationBuilder()
+                  .AddUserSecrets<ConfigAws>()
+                  .Build();
 
-            var messagePublisherService = new MessagePublisherService(
-                configuration.GetSection(nameof(ConfigAws)).Get<ConfigAws>());
+                var messagePublisherService = new MessagePublisherService(
+                     configuration.GetSection(nameof(ConfigAws)).Get<ConfigAws>());
 
-            Watcher.CreateWatcher(directory);
-
+                Watcher.CreateWatcher(directory, (string textContent, string filename) =>
+                {
+                    Console.WriteLine("Sending message to SNS");
+                    //await messagePublisherService.SendMessageAsync(path);
+                    messagePublisherService.SendMessageAsync(textContent, filename).Wait();
+                });
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine($"Exception: {e.Message}");
+            }
+            finally { 
+                Console.ReadLine();
+            }
         }
     }
 }
