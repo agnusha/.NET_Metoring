@@ -33,19 +33,20 @@ namespace Expressions.Task3.E3SQueryProvider
 
                 return node;
             }
+
+            else if (node.Method.DeclaringType == typeof(String)
+            && node.Method.Name == "Equals")
+            {
+                VisitTwoNodes(node.Object, node.Arguments[0]);
+                return node;
+            }
+
             return base.VisitMethodCall(node);
         }
 
         protected override Expression VisitBinary(BinaryExpression node)
         {
-            void VisitTwoNodes(Expression first, Expression second)
-            {
-                Visit(first);
-                _resultStringBuilder.Append(":");
-                _resultStringBuilder.Append("(");
-                Visit(second);
-                _resultStringBuilder.Append(")");
-            }
+
             switch (node.NodeType)
             {
                 case ExpressionType.Equal:
@@ -79,6 +80,15 @@ namespace Expressions.Task3.E3SQueryProvider
             _resultStringBuilder.Append(node.Value);
 
             return node;
+        }
+
+        private void VisitTwoNodes(Expression first, Expression second)
+        {
+            Visit(first);
+            _resultStringBuilder.Append(":");
+            _resultStringBuilder.Append("(");
+            Visit(second);
+            _resultStringBuilder.Append(")");
         }
 
         #endregion
