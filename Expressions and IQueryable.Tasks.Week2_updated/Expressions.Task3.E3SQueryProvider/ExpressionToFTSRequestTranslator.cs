@@ -38,19 +38,24 @@ namespace Expressions.Task3.E3SQueryProvider
 
         protected override Expression VisitBinary(BinaryExpression node)
         {
+            void VisitTwoNodes(Expression first, Expression second)
+            {
+                Visit(first);
+                _resultStringBuilder.Append(":");
+                _resultStringBuilder.Append("(");
+                Visit(second);
+                _resultStringBuilder.Append(")");
+            }
             switch (node.NodeType)
             {
                 case ExpressionType.Equal:
-                    if (node.Left.NodeType != ExpressionType.MemberAccess)
-                        throw new NotSupportedException($"Left operand should be property or field: {node.NodeType}");
 
-                    if (node.Right.NodeType != ExpressionType.Constant)
-                        throw new NotSupportedException($"Right operand should be constant: {node.NodeType}");
+                    if (node.Left.NodeType == ExpressionType.MemberAccess && (node.Right.NodeType == ExpressionType.Constant))
+                        VisitTwoNodes(node.Left, node.Right);
 
-                    Visit(node.Left);
-                    _resultStringBuilder.Append("(");
-                    Visit(node.Right);
-                    _resultStringBuilder.Append(")");
+                    else if (node.Left.NodeType == ExpressionType.Constant && (node.Right.NodeType == ExpressionType.MemberAccess))
+                        VisitTwoNodes(node.Right, node.Left);
+
                     break;
 
                 default:
@@ -58,11 +63,13 @@ namespace Expressions.Task3.E3SQueryProvider
             };
 
             return node;
+
+
         }
 
         protected override Expression VisitMember(MemberExpression node)
         {
-            _resultStringBuilder.Append(node.Member.Name).Append(":");
+            _resultStringBuilder.Append(node.Member.Name);
 
             return base.VisitMember(node);
         }

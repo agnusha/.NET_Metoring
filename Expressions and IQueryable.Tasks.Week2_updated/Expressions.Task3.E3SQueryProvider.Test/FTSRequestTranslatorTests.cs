@@ -13,12 +13,19 @@ namespace Expressions.Task3.E3SQueryProvider.Test
         [Fact]
         public void TestBinaryBackOrder()
         {
-            var translator = new ExpressionToFtsRequestTranslator();
-            Expression<Func<EmployeeEntity, bool>> expression
+            var translator1 = new ExpressionToFtsRequestTranslator();
+            Expression<Func<EmployeeEntity, bool>> expression1
                 = employee => "EPRUIZHW006" == employee.Workstation;
 
-            string translated = translator.Translate(expression);
-            Assert.Equal("Workstation:(EPRUIZHW006)", translated);
+            var translator2 = new ExpressionToFtsRequestTranslator();
+            Expression<Func<EmployeeEntity, bool>> expression2
+                = employee => employee.Workstation == "EPRUIZHW006";
+
+            string translated1 = translator1.Translate(expression1);
+            Assert.Equal("Workstation:(EPRUIZHW006)", translated1);
+
+            string translated2 = translator2.Translate(expression2);
+            Assert.Equal("Workstation:(EPRUIZHW006)", translated2);
         }
 
         #endregion
