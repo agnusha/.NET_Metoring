@@ -34,13 +34,28 @@ namespace Expressions.Task3.E3SQueryProvider
                 return node;
             }
 
-            else if (node.Method.DeclaringType == typeof(String)
-            && node.Method.Name == "Equals")
+            if (node.Method.DeclaringType == typeof(String))
             {
-                VisitTwoNodes(node.Object, node.Arguments[0]);
-                return node;
-            }
+                switch (node.Method.Name)
+                {
+                    case "Equals":
+                        VisitTwoNodes(node.Object, node.Arguments[0]);
+                        return node;
 
+                    case "StartsWith":
+                        VisitTwoNodes(node.Object, node.Arguments[0], false, true);
+                        return node;
+
+                    case "EndsWith":
+                        VisitTwoNodes(node.Object, node.Arguments[0], true);
+                        return node;
+
+                    case "Contains":
+                        VisitTwoNodes(node.Object, node.Arguments[0], true, true);
+                        return node;
+                }
+
+            }
             return base.VisitMethodCall(node);
         }
 
@@ -82,12 +97,14 @@ namespace Expressions.Task3.E3SQueryProvider
             return node;
         }
 
-        private void VisitTwoNodes(Expression first, Expression second)
+        private void VisitTwoNodes(Expression first, Expression second, bool isAppendBefore = false, bool isAppendAfter = false)
         {
             Visit(first);
             _resultStringBuilder.Append(":");
             _resultStringBuilder.Append("(");
+            if (isAppendBefore) _resultStringBuilder.Append("*");
             Visit(second);
+            if (isAppendAfter) _resultStringBuilder.Append("*");
             _resultStringBuilder.Append(")");
         }
 
