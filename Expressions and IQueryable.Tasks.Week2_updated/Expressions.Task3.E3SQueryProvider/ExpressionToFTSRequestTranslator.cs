@@ -73,14 +73,18 @@ namespace Expressions.Task3.E3SQueryProvider
                         VisitTwoNodes(node.Right, node.Left);
 
                     break;
-
+                case ExpressionType.AndAlso:
+                    _resultStringBuilder.Append("'statements': [");
+                    _resultStringBuilder.Append("{ 'query':'");
+                    Visit(node.Left);
+                    _resultStringBuilder.Append("'}, { 'query':'");
+                    Visit(node.Right);
+                    _resultStringBuilder.Append("'}]");
+                    break;
                 default:
                     throw new NotSupportedException($"Operation '{node.NodeType}' is not supported");
-            };
-
+            }
             return node;
-
-
         }
 
         protected override Expression VisitMember(MemberExpression node)
