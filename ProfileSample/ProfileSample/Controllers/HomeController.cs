@@ -43,8 +43,9 @@ namespace ProfileSample.Controllers
                         };
 
                         context.ImgSources.Add(entity);
-                        context.SaveChanges();
                     }
+                    // removed from loop
+                    context.SaveChanges();
                 } 
             }
 
