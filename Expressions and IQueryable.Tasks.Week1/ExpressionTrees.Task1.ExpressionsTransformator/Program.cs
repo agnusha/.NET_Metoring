@@ -7,6 +7,7 @@
  * The results could be printed in console or checked via Debugger using any Visualizer.
  */
 using System;
+using System.Collections.Generic;
 using System.Linq.Expressions;
 
 namespace ExpressionTrees.Task1.ExpressionsTransformer
@@ -20,11 +21,15 @@ namespace ExpressionTrees.Task1.ExpressionsTransformer
 
             var visitor = new IncDecExpressionVisitor();
 
-            Expression<Func<Int32, Int32>> expressionInc = variable => variable + 1;
-            Expression<Func<Int32, Int32>> expressionDec = variable => variable - 1;
+            Expression<Func<int, int>> expressionInc = variable => variable + 1;
+            Expression<Func<int, int>> expressionDec = variable => variable - 1;
 
             Visit(visitor, expressionInc);
             Visit(visitor, expressionDec);
+
+            Console.WriteLine("Expression Visitor for change params.");
+            Expression<Func<int, int, int>> changedExpression = (v1, v2) => v1 + v2 - 100;
+            VisitTask2(visitor, changedExpression);
 
             Console.ReadLine();
         }
@@ -32,12 +37,24 @@ namespace ExpressionTrees.Task1.ExpressionsTransformer
         private static void Visit(IncDecExpressionVisitor visitor, Expression<Func<Int32, Int32>> expression)
         {
             Console.WriteLine(expression);
+            var res = visitor.Modify(expression);
+            PrintResult(res);
+        }
 
-            var res1 = visitor.Modify(expression);
+        private static void VisitTask2(IncDecExpressionVisitor visitor, Expression<Func<int, int, int>> expression)
+        {
+            Console.WriteLine(expression);
+            var pairs = new Dictionary<string, int>() { { "v1", 100 }, { "v2", 200 } };
+
+            var res = visitor.Modify(expression, pairs);
+            PrintResult(res);
+        }
+
+        private static void PrintResult(Expression res)
+        {
             Console.WriteLine("Result");
-            Console.WriteLine(res1);
+            Console.WriteLine(res);
             Console.WriteLine();
-
         }
     }
 }
