@@ -7,6 +7,7 @@
  * The results could be printed in console or checked via Debugger using any Visualizer.
  */
 using System;
+using System.Linq.Expressions;
 
 namespace ExpressionTrees.Task1.ExpressionsTransformer
 {
@@ -17,9 +18,26 @@ namespace ExpressionTrees.Task1.ExpressionsTransformer
             Console.WriteLine("Expression Visitor for increment/decrement.");
             Console.WriteLine();
 
-            // todo: feel free to add your code here
+            var visitor = new IncDecExpressionVisitor();
+
+            Expression<Func<Int32, Int32>> expressionInc = variable => variable + 1;
+            Expression<Func<Int32, Int32>> expressionDec = variable => variable - 1;
+
+            Visit(visitor, expressionInc);
+            Visit(visitor, expressionDec);
 
             Console.ReadLine();
+        }
+
+        private static void Visit(IncDecExpressionVisitor visitor, Expression<Func<Int32, Int32>> expression)
+        {
+            Console.WriteLine(expression);
+
+            var res1 = visitor.Modify(expression);
+            Console.WriteLine("Result");
+            Console.WriteLine(res1);
+            Console.WriteLine();
+
         }
     }
 }
