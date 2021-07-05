@@ -12,7 +12,7 @@ namespace ExpressionTrees.Task1.ExpressionsTransformer
         {
             isReplaced = true;
             this.pairs = pairs;
-            return (LambdaExpression)base.Visit(expression);
+            return base.Visit(expression);
         }
 
         public Expression Modify(Expression expression)
