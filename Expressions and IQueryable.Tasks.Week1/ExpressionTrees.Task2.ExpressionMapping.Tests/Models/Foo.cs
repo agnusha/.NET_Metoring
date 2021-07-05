@@ -2,6 +2,10 @@
 {
     internal class Foo
     {
+        public Foo()
+        {
+        }
+        
         public Foo(int propertyCopy1, int propertyNotCopyFoo1, string propertyCopy2, int propertyCopy3, string propertyNotCopyFoo2)
         {
             PropertyCopy1 = propertyCopy1;
