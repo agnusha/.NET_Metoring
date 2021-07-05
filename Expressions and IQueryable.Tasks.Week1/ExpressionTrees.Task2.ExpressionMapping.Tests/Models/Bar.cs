@@ -2,6 +2,24 @@
 {
     internal class Bar
     {
-        // add here some other properties
+        public Bar(int propertyCopy1, int propertyNotCopyBar1, string propertyCopy2, string propertyCopy3, string propertyNotCopy2)
+        {
+            PropertyCopy1 = propertyCopy1;
+            PropertyNotCopyBar1 = propertyNotCopyBar1;
+            PropertyCopy2 = propertyCopy2;
+            PropertyCopy3 = propertyCopy3;
+            PropertyNotCopy2 = propertyNotCopy2;
+        }
+
+        public int PropertyCopy1 { get; set; }
+
+        public int PropertyNotCopyBar1 { get; set; }
+
+        public string PropertyCopy2 { get; set; }
+
+        public string PropertyCopy3 { get; set; }
+
+        public string PropertyNotCopy2 { get; set; }
+
     }
 }
