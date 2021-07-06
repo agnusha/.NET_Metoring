@@ -6,15 +6,33 @@ namespace ExpressionTrees.Task2.ExpressionMapping.Tests
     [TestClass]
     public class ExpressionMappingTests
     {
-        // todo: add as many test methods as you wish, but they should be enough to cover basic scenarios of the mapping generator
+        private static Mapper<Foo, Bar> _mapper;
 
-        [TestMethod]
-        public void TestMethod1()
+        [ClassInitialize]
+        public static void ClassInitialize(TestContext context)
         {
             var mapGenerator = new MappingGenerator();
-            var mapper = mapGenerator.Generate<Foo, Bar>();
+            _mapper = mapGenerator.Generate<Foo, Bar>();
+        }
 
-            var res = mapper.Map(new Foo());
+        [TestMethod]
+        public void TestMethodAllProperties()
+        {
+            var foo = new Foo(11, 22, "aaa copy", 333, "ccc");
+            var res = _mapper.Map(foo);
+            Assert.IsTrue(foo.EqualsBar(res));
+        }
+
+        [TestMethod]
+        public void TestMethodTwoProperties()
+        {
+            var foo = new Foo()
+            {
+                PropertyCopy1 = 11,
+                PropertyCopy2 = "aaaaaa"
+            };
+            var res = _mapper.Map(foo);
+            Assert.IsTrue(foo.EqualsBar(res));
         }
     }
 }
