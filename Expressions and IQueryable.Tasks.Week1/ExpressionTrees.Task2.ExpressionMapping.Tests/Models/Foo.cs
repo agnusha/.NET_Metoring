@@ -6,12 +6,11 @@
         {
         }
         
-        public Foo(int propertyCopy1, int propertyNotCopyFoo1, string propertyCopy2, int propertyCopy3, string propertyNotCopyFoo2)
+        public Foo(int propertyCopy1, int propertyNotCopyFoo1, string propertyCopy2,  string propertyNotCopyFoo2)
         {
             PropertyCopy1 = propertyCopy1;
             PropertyNotCopyFoo1 = propertyNotCopyFoo1;
             PropertyCopy2 = propertyCopy2;
-            PropertyCopy3 = propertyCopy3;
             PropertyNotCopyFoo2 = propertyNotCopyFoo2;
         }
 
@@ -21,15 +20,12 @@
 
         public string PropertyCopy2 { get; set; }
 
-        public int PropertyCopy3 { get; set; }
-
         public string PropertyNotCopyFoo2 { get; set; }
 
         public bool EqualsBar(Bar bar)
         {
             return PropertyCopy1 == bar.PropertyCopy1 &&
-                   PropertyCopy2 == bar.PropertyCopy2 &&
-                   PropertyCopy3.ToString() == bar.PropertyCopy3;
+                   PropertyCopy2 == bar.PropertyCopy2;
         }
     }
 }

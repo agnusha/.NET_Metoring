@@ -6,12 +6,11 @@
         {
         }
 
-        public Bar(int propertyCopy1, int propertyNotCopyBar1, string propertyCopy2, string propertyCopy3, string propertyNotCopyBar2)
+        public Bar(int propertyCopy1, int propertyNotCopyBar1, string propertyCopy2, string propertyNotCopyBar2)
         {
             PropertyCopy1 = propertyCopy1;
             PropertyNotCopyBar1 = propertyNotCopyBar1;
             PropertyCopy2 = propertyCopy2;
-            PropertyCopy3 = propertyCopy3;
             PropertyNotCopyBar2 = propertyNotCopyBar2;
         }
 
@@ -20,8 +19,6 @@
         public int PropertyNotCopyBar1 { get; set; }
 
         public string PropertyCopy2 { get; set; }
-
-        public string PropertyCopy3 { get; set; }
 
         public string PropertyNotCopyBar2 { get; set; }
 
