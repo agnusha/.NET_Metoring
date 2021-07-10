@@ -15,8 +15,8 @@ namespace MessageService
         {
             var credentials = new BasicAWSCredentials(configAws.AccessKey, configAws.SecretKey);
 
-            using var sqsClient = new AmazonSQSClient(credentials);
-            using var snsClient = new AmazonSimpleNotificationServiceClient(credentials);
+            var sqsClient = new AmazonSQSClient(credentials);
+            var snsClient = new AmazonSimpleNotificationServiceClient(credentials);
             _subscriber = new Subscriber(sqsClient, snsClient, configAws.TopicName, configAws.QueueName);
         }
 
