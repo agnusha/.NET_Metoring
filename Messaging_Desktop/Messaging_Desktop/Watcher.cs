@@ -1,7 +1,8 @@
 ﻿using System;
 using System.IO;
+using System.Text;
 
-namespace Example.PublisherApplication
+namespace Messaging_Desktop
 {
     public static class Watcher
     {
@@ -23,7 +24,6 @@ namespace Example.PublisherApplication
 
             _watcher.Created += OnCreated;
             _watcher.Deleted += OnDeleted;
-            _watcher.Renamed += OnRenamed;
             _watcher.Error += OnError;
 
             _watcher.IncludeSubdirectories = true;
@@ -37,18 +37,10 @@ namespace Example.PublisherApplication
 
             var textFromFile = ReadFile(e.FullPath);
             _action(textFromFile, e.Name);
-
         }
 
         private static void OnDeleted(object sender, FileSystemEventArgs e) =>
             Console.WriteLine($"Deleted: {e.FullPath}");
-
-        private static void OnRenamed(object sender, RenamedEventArgs e)
-        {
-            Console.WriteLine($"Renamed:");
-            Console.WriteLine($"    Old: {e.OldFullPath}");
-            Console.WriteLine($"    New: {e.FullPath}");
-        }
 
         private static void OnError(object sender, ErrorEventArgs e) =>
             PrintException(e.GetException());
@@ -67,11 +59,10 @@ namespace Example.PublisherApplication
 
         private static string ReadFile(string path)
         {
-            using FileStream fstream = File.Open(path, FileMode.Open, FileAccess.Read, FileShare.Read);
-            byte[] array = new byte[fstream.Length];
+            using var fstream = File.Open(path, FileMode.Open, FileAccess.Read, FileShare.Read);
+            var array = new byte[fstream.Length];
             fstream.Read(array, 0, array.Length);
-            string textFromFile = System.Text.Encoding.Default.GetString(array);
-
+            var textFromFile = Encoding.Default.GetString(array);
             return textFromFile;
         }
     }
