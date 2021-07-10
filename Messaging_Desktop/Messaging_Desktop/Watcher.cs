@@ -67,7 +67,7 @@ namespace Example.PublisherApplication
 
         private static string ReadFile(string path)
         {
-            using FileStream fstream = File.OpenRead(path);
+            using FileStream fstream = File.Open(path, FileMode.Open, FileAccess.Read, FileShare.Read);
             byte[] array = new byte[fstream.Length];
             fstream.Read(array, 0, array.Length);
             string textFromFile = System.Text.Encoding.Default.GetString(array);
