@@ -22,11 +22,10 @@ namespace Messaging_Desktop
                 var messagePublisherService = new MessagePublisherService(
                      configuration.GetSection(nameof(ConfigAws)).Get<ConfigAws>());
 
-                Watcher.CreateWatcher(directory, (string textContent, string filename) =>
+                Watcher.CreateWatcher(directory, async (string textContent, string filename) =>
                 {
                     Console.WriteLine("Sending message to SNS");
-                    //await messagePublisherService.SendMessageAsync(path);
-                    messagePublisherService.SendMessageAsync(textContent, filename).Wait();
+                    await messagePublisherService.SendMessageAsync(textContent, filename);
                 });
             }
             catch (Exception e)
