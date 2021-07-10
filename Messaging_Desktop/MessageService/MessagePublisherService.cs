@@ -1,7 +1,6 @@
 ﻿using Amazon.Runtime;
 using Amazon.SimpleNotificationService;
 using MessageService.Models;
-using System;
 using System.Threading.Tasks;
 
 namespace MessageService
@@ -18,9 +17,9 @@ namespace MessageService
             _publisher = new Publisher(snsClient, configAws.TopicName);
         }
 
-        public async Task SendMessageAsync(string message, string filename)
+        public async Task SendMessageAsync(byte[] bytesFromFile, string filename)
         {
-            await _publisher.PublishAsync(message, filename);
+            await _publisher.PublishAsync(bytesFromFile, filename);
         }
 
     }

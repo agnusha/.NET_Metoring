@@ -6,8 +6,8 @@ namespace Messaging_Desktop
 {
     public static class Watcher
     {
-        private static Action<string, string> _action;
-        public static void CreateWatcher(string folder, Action<string, string> action)
+        private static Action<byte[], string> _action;
+        public static void CreateWatcher(string folder, Action<byte[], string> action)
         {
             _action = action;
             var _watcher = new FileSystemWatcher(@$"{folder}")
@@ -35,8 +35,8 @@ namespace Messaging_Desktop
             string value = $"Created: {e.FullPath}";
             Console.WriteLine(value);
 
-            var textFromFile = ReadFile(e.FullPath);
-            _action(textFromFile, e.Name);
+            var bytesFromFile = ReadFile(e.FullPath);
+            _action(bytesFromFile, e.Name);
         }
 
         private static void OnDeleted(object sender, FileSystemEventArgs e) =>
@@ -57,13 +57,12 @@ namespace Messaging_Desktop
             }
         }
 
-        private static string ReadFile(string path)
+        private static byte[] ReadFile(string path)
         {
             using var fstream = File.Open(path, FileMode.Open, FileAccess.Read, FileShare.Read);
             var array = new byte[fstream.Length];
             fstream.Read(array, 0, array.Length);
-            var textFromFile = Encoding.Default.GetString(array);
-            return textFromFile;
+            return array;
         }
     }
 }
