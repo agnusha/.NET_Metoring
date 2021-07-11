@@ -22,8 +22,13 @@ namespace MessageService
 
         public async Task ListenMessageAsync()
         {
-            await _subscriber.ListenAsync(message => {
-                Console.WriteLine("Received message: " + message);
+            await _subscriber.ListenAsync(message =>
+            {
+                var name = message.MessageAttributes["filename"].StringValue;
+                var order = message.MessageAttributes["order"].StringValue;
+
+                Console.WriteLine("Received message for file: " + name);
+                Console.WriteLine("Order: " + order);
             });
         }
     }

@@ -59,11 +59,15 @@ namespace MessageService
 
             while (true)
             {
-                var response = await _sqsClient.ReceiveMessageAsync(new ReceiveMessageRequest { QueueUrl = _queueUrl, WaitTimeSeconds = 10 });
+                var response = await _sqsClient.ReceiveMessageAsync(new ReceiveMessageRequest
+                {
+                    QueueUrl = _queueUrl, WaitTimeSeconds = 10,
+                    MessageAttributeNames = new List<string>() { "filename", "order" }
+                });
                 foreach (var message in response.Messages)
                 {
                     messageHandler(message);
-                    await _sqsClient.DeleteMessageAsync(_queueUrl, message.ReceiptHandle);
+                    //await _sqsClient.DeleteMessageAsync(_queueUrl, message.ReceiptHandle);
                 }
             }
         }
