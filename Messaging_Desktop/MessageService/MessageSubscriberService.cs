@@ -3,6 +3,9 @@ using Amazon.SimpleNotificationService;
 using Amazon.SQS;
 using MessageService.Models;
 using System;
+using System.IO;
+using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace MessageService
@@ -22,14 +25,33 @@ namespace MessageService
 
         public async Task ListenMessageAsync()
         {
-            await _subscriber.ListenAsync(message =>
+            await _subscriber.ListenAsync(async messages =>
             {
-                var name = message.MessageAttributes["filename"].StringValue;
-                var order = message.MessageAttributes["order"].StringValue;
+                var messageInfos = messages.Select(m => new MessageInfo(m.MessageAttributes["filename"].StringValue,
+                        m.MessageAttributes["order"].StringValue, m.Body)).OrderBy(mi => mi.Order)
+                    .GroupBy(mi => mi.FileName);
 
-                Console.WriteLine("Received message for file: " + name);
-                Console.WriteLine("Order: " + order);
+                foreach (var messageInfo in messageInfos)
+                {
+                    var fullContent = string.Join("", messageInfo.Select(mi => mi.Body));
+                    await CreateFile(messageInfo.Key, fullContent);
+                    Console.WriteLine("Received message for file: " + messageInfo.Key);
+                }
             });
+        }
+
+        public async Task CreateFile(string name, string content)
+        {
+            var fileName = $@"C:\Users\Ahniya_Staravoitava\Downloads\{name}";
+
+            if (File.Exists(fileName))
+            {
+                File.Delete(fileName);
+            }
+
+            await using var fs = File.Create(fileName);
+            var title = new UTF8Encoding(true).GetBytes(content);
+            await fs.WriteAsync(title, 0, title.Length);
         }
     }
 }

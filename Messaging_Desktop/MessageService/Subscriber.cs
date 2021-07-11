@@ -52,7 +52,7 @@ namespace MessageService
             await _snsClient.SubscribeQueueAsync(_topicArn, _sqsClient, _queueUrl);
         }
 
-        public async Task ListenAsync(Action<Message> messageHandler)
+        public async Task ListenAsync(Action<List<Message>> messagesHandler)
         {
             if (!_initialised)
                 await Initialise();
@@ -64,11 +64,9 @@ namespace MessageService
                     QueueUrl = _queueUrl, WaitTimeSeconds = 10,
                     MessageAttributeNames = new List<string>() { "filename", "order" }
                 });
-                foreach (var message in response.Messages)
-                {
-                    messageHandler(message);
-                    //await _sqsClient.DeleteMessageAsync(_queueUrl, message.ReceiptHandle);
-                }
+
+                messagesHandler(response.Messages);
+
             }
         }
 
