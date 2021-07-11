@@ -46,7 +46,7 @@ namespace MessageService
 
             if (File.Exists(fileName))
             {
-                File.Delete(fileName);
+                return;
             }
 
             await using var fs = File.Create(fileName);

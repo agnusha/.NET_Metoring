@@ -1,5 +1,4 @@
-﻿using Example.PublisherApplication;
-using MessageService;
+﻿using MessageService;
 using System;
 using Microsoft.Extensions.Configuration;
 using MessageService.Models;
@@ -13,8 +12,10 @@ namespace Messaging_Desktop
             try
             {
                 Console.WriteLine("Write a directory to listen");
+                
                 var directory = Console.ReadLine();
-
+                //var directory = "C:\\test";
+                
                 var configuration = new ConfigurationBuilder()
                   .AddUserSecrets<ConfigAws>()
                   .Build();
@@ -22,10 +23,10 @@ namespace Messaging_Desktop
                 var messagePublisherService = new MessagePublisherService(
                      configuration.GetSection(nameof(ConfigAws)).Get<ConfigAws>());
 
-                Watcher.CreateWatcher(directory, async (string textContent, string filename) =>
+                Watcher.CreateWatcher(directory, async (byte[] bytesFromFile, string filename) =>
                 {
-                    Console.WriteLine("Sending message to SNS");
-                    await messagePublisherService.SendMessageAsync(textContent, filename);
+                    await messagePublisherService.SendMessageAsync(bytesFromFile, filename);
+                    Console.WriteLine("Sent message to SNS");
                 });
             }
             catch (Exception e)

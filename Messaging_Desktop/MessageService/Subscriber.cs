@@ -59,13 +59,23 @@ namespace MessageService
 
             while (true)
             {
-                var response = await _sqsClient.ReceiveMessageAsync(new ReceiveMessageRequest
+                var messageNumber = (await _sqsClient.GetQueueAttributesAsync
+                    (_queueUrl, new List<string>() { "ApproximateNumberOfMessages" })).ApproximateNumberOfMessages;
+               
+                if (messageNumber == 0) continue;
+                
+                var result = new List<Message>();
+                for (var i = 0; i < messageNumber; i++)
                 {
-                    QueueUrl = _queueUrl, WaitTimeSeconds = 10,
-                    MessageAttributeNames = new List<string>() { "filename", "order" }
-                });
-
-                messagesHandler(response.Messages);
+                    var response = await _sqsClient.ReceiveMessageAsync(new ReceiveMessageRequest
+                    {
+                        QueueUrl = _queueUrl,
+                        WaitTimeSeconds = 10,
+                        MessageAttributeNames = new List<string>() {"filename", "order"}
+                    });
+                    response.Messages.ForEach(m => result.Add(m));
+                }
+                messagesHandler(result);
 
             }
         }
