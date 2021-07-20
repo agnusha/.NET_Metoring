@@ -1,10 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Composite.Task2
 {
     public class Form : IComponent
     {
-        String name;
+        readonly String name;
+        readonly List<IComponent> items = new List<IComponent>();
 
         public Form(String name)
         {
@@ -13,12 +15,15 @@ namespace Composite.Task2
 
         public void AddComponent(IComponent component)
         {
-            throw new NotImplementedException();
+            items.Add(component);
         }
 
         public string ConvertToString(int depth = 0)
         {
-            throw new NotImplementedException();
+            var res = string.Empty;
+            items.ForEach(i => res += i.ConvertToString(depth+1));
+            return $@"<form name=\'{name}\'>
+{res}</form>";
         }
     }
 }
