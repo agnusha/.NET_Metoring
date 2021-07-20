@@ -1,10 +1,8 @@
-﻿using System;
-
-namespace Composite.Task2
+﻿namespace Composite.Task2
 {
     public class LabelText : IComponent
     {
-        string value;
+        readonly string value;
 
         public LabelText(string value)
         {
@@ -13,7 +11,7 @@ namespace Composite.Task2
 
         public string ConvertToString(int depth = 0)
         {
-            throw new NotImplementedException();
+            return $"{SpaceGeneration.Space(depth)}<label value=\'{value}\'/>{SpaceGeneration.EndLine(depth)}";
         }
     }
 }

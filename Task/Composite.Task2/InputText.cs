@@ -1,11 +1,9 @@
-﻿using System;
-
-namespace Composite.Task2
+﻿namespace Composite.Task2
 {
     public class InputText : IComponent
     {
-        string name;
-        string value;
+        readonly string name;
+        readonly string value;
 
         public InputText(string name, string value)
         {
@@ -15,7 +13,7 @@ namespace Composite.Task2
 
         public string ConvertToString(int depth = 0)
         {
-            throw new NotImplementedException();
+            return $"{SpaceGeneration.Space(depth)}<inputText name=\'{name}\' value=\'{value}\'/>{SpaceGeneration.EndLine(depth)}";
         }
     }
 }
