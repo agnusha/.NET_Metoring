@@ -5,7 +5,7 @@ namespace TemplateMethod.Task2
 {
     public class MasalaCooker
     {
-        private ICooker cooker;
+        private readonly ICooker cooker;
 
         public MasalaCooker(ICooker cooker)
         {
@@ -14,7 +14,15 @@ namespace TemplateMethod.Task2
 
         public void CookMasala(Country country)
         {
-            throw new NotImplementedException();
+            CookerBase cb;
+            if (country == Country.Ukraine) {
+                cb = new UkraineCooker();
+            }
+            else
+            {
+                cb = new IndiaCooker();
+            }
+            cb.CookMasala(cooker);
         }
     }
 }
